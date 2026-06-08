@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>黄金白银下跌可视化报告 - 2026-06-08</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --ink: #19202a;
+      --muted: #667085;
+      --line: #dfe4ea;
+      --gold: #c6921d;
+      --gold-soft: #fff3cf;
+      --silver: #8d99a6;
+      --silver-soft: #edf1f5;
+      --risk: #c84630;
+      --risk-soft: #ffe6df;
+      --blue: #2864b3;
+      --blue-soft: #e8f0fb;
+      --green: #24745a;
+      --green-soft: #e6f3ee;
+      --purple: #7456a8;
+      --purple-soft: #f0eaf8;
+      --shadow: 0 18px 44px rgba(25, 32, 42, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 247, 249, 0.94)),
+        repeating-linear-gradient(90deg, rgba(25, 32, 42, 0.035) 0 1px, transparent 1px 80px),
+        var(--bg);
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      padding: 28px 0 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 52px);
+      line-height: 1.05;
+      max-width: 900px;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 16px 0 0;
+      max-width: 860px;
+      color: #3a4654;
+      font-size: clamp(16px, 2vw, 19px);
+    }
+
+    .date-chip {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      min-width: 132px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      font-weight: 800;
+      box-shadow: 0 8px 22px rgba(25, 32, 42, 0.05);
+    }
+
+    .date-chip span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: stretch;
+      margin: 12px 0 26px;
+    }
+
+    .panel,
+    .metric,
+    .scenario,
+    .factor,
+    .source-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .panel h2,
+    .band h2 {
+      margin: 0 0 14px;
+      font-size: clamp(21px, 2.3vw, 29px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .panel h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .summary {
+      display: grid;
+      gap: 14px;
+    }
+
+    .summary-line {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+    }
+
+    .summary-line strong {
+      color: #151a21;
+      font-size: 15px;
+    }
+
+    .track {
+      position: relative;
+      min-height: 14px;
+      border-radius: 999px;
+      background: #edf0f4;
+      overflow: hidden;
+    }
+
+    .track span {
+      position: absolute;
+      inset: 0 auto 0 0;
+      border-radius: inherit;
+    }
+
+    .track.gold span {
+      width: 42%;
+      background: var(--gold);
+    }
+
+    .track.silver span {
+      width: 100%;
+      background: var(--silver);
+    }
+
+    .track.rate span {
+      width: 76%;
+      background: var(--risk);
+    }
+
+    .shock-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      padding: 18px;
+      min-height: 172px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metric .label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+
+    .dot.gold {
+      background: var(--gold);
+    }
+
+    .dot.silver {
+      background: var(--silver);
+    }
+
+    .value {
+      margin: 18px 0 6px;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .metric p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section {
+      padding: 28px 0;
+      border-top: 1px solid rgba(25, 32, 42, 0.08);
+    }
+
+    .band {
+      padding: 28px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .factor {
+      padding: 18px;
+      min-height: 214px;
+      display: grid;
+      gap: 12px;
+      border-top: 4px solid var(--blue);
+    }
+
+    .factor[data-asset="gold"] {
+      border-top-color: var(--gold);
+    }
+
+    .factor[data-asset="silver"] {
+      border-top-color: var(--silver);
+    }
+
+    .factor[data-asset="macro"] {
+      border-top-color: var(--risk);
+    }
+
+    .factor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .factor[data-asset="gold"] .tag {
+      color: #8b6100;
+      background: var(--gold-soft);
+    }
+
+    .factor[data-asset="silver"] .tag {
+      color: #52606d;
+      background: var(--silver-soft);
+    }
+
+    .factor[data-asset="macro"] .tag {
+      color: #983421;
+      background: var(--risk-soft);
+    }
+
+    .factor h3 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+
+    .factor p {
+      margin: 0;
+      color: #4b5664;
+      font-size: 14px;
+    }
+
+    .meter {
+      display: grid;
+      gap: 6px;
+    }
+
+    .meter-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .meter-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: #edf0f4;
+      overflow: hidden;
+    }
+
+    .meter-bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue);
+    }
+
+    .factor[data-asset="gold"] .meter-bar span {
+      background: var(--gold);
+    }
+
+    .factor[data-asset="silver"] .meter-bar span {
+      background: var(--silver);
+    }
+
+    .factor[data-asset="macro"] .meter-bar span {
+      background: var(--risk);
+    }
+
+    .switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 16px;
+    }
+
+    .switcher button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #303a46;
+      min-height: 38px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .switcher button[aria-pressed="true"] {
+      background: #19202a;
+      border-color: #19202a;
+      color: #fff;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 16px;
+      margin-top: 6px;
+      padding-left: 20px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: #d7dde5;
+    }
+
+    .event {
+      position: relative;
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .event::before {
+      content: "";
+      position: absolute;
+      left: -19px;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--blue);
+    }
+
+    .event:nth-child(2)::before {
+      border-color: var(--risk);
+    }
+
+    .event:nth-child(3)::before {
+      border-color: var(--gold);
+    }
+
+    .event:nth-child(4)::before {
+      border-color: var(--silver);
+    }
+
+    .event time {
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 13px;
+    }
+
+    .event strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 16px;
+    }
+
+    .event p {
+      margin: 0;
+      color: #4b5664;
+      font-size: 14px;
+    }
+
+    .svg-wrap {
+      min-height: 346px;
+      overflow: hidden;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .axis-label {
+      fill: #667085;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .chart-title {
+      fill: #19202a;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .chart-note {
+      fill: #667085;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .asset-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: #fff;
+      min-height: 232px;
+    }
+
+    .asset-box h3 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .asset-box ul,
+    .risk-list,
+    .source-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .asset-box li,
+    .risk-list li,
+    .source-list li {
+      position: relative;
+      padding-left: 18px;
+      color: #44505e;
+      font-size: 14px;
+    }
+
+    .asset-box li::before,
+    .risk-list li::before,
+    .source-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.65em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .asset-box.gold li::before {
+      background: var(--gold);
+    }
+
+    .asset-box.silver li::before {
+      background: var(--silver);
+    }
+
+    .scenario {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      min-height: 206px;
+      border-left: 5px solid var(--risk);
+    }
+
+    .scenario:nth-child(2) {
+      border-left-color: var(--green);
+    }
+
+    .scenario:nth-child(3) {
+      border-left-color: var(--purple);
+    }
+
+    .scenario h3 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .scenario p {
+      margin: 0;
+      color: #4b5664;
+      font-size: 14px;
+    }
+
+    .probability {
+      display: grid;
+      gap: 6px;
+      align-self: end;
+    }
+
+    .probability span:first-child {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .probability .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: #edf0f4;
+      overflow: hidden;
+    }
+
+    .probability .bar i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--risk);
+    }
+
+    .scenario:nth-child(2) .bar i {
+      background: var(--green);
+    }
+
+    .scenario:nth-child(3) .bar i {
+      background: var(--purple);
+    }
+
+    .watchlist {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .watch {
+      min-height: 116px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .watch b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .watch span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .source-card {
+      padding: 18px;
+    }
+
+    .source-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 18px;
+    }
+
+    .footer-note {
+      margin: 22px 0 34px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid-3,
+      .grid-2,
+      .watchlist,
+      .source-list {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .watchlist {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .topbar,
+      .hero-grid,
+      .shock-board,
+      .grid-3,
+      .grid-2,
+      .compare,
+      .watchlist,
+      .source-list {
+        grid-template-columns: 1fr;
+      }
+
+      .date-chip {
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .event {
+        grid-template-columns: 1fr;
+        gap: 3px;
+      }
+
+      .summary-line {
+        grid-template-columns: 72px minmax(0, 1fr);
+      }
+
+      .value {
+        font-size: 42px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .panel,
+      .metric,
+      .scenario,
+      .factor,
+      .source-card,
+      .asset-box,
+      .watch {
+        box-shadow: none;
+      }
+
+      .switcher {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">贵金属市场可视化报告</p>
+        <h1>黄金白银急跌：强就业数据触发利率与美元重定价</h1>
+        <p class="lead">6月5日至6月8日前后，金银下跌的主线是美国就业韧性超预期、降息押注降温、美元和美债收益率走强；白银因工业属性和高波动仓位，跌幅被进一步放大。</p>
+      </div>
+      <div class="date-chip">
+        <span>报告日期</span>
+        2026-06-08
+      </div>
+    </header>
+
+    <section class="hero-grid" aria-label="核心看板">
+      <div class="panel">
+        <h2>一句话结论</h2>
+        <div class="summary">
+          <div class="summary-line">
+            <strong>触发器</strong>
+            <div class="track rate" aria-label="就业数据冲击强度 76%"><span></span></div>
+          </div>
+          <p>美国5月非农就业增加17.2万人、失业率4.3%，强化了“高利率更久”的交易。</p>
+          <div class="summary-line">
+            <strong>黄金</strong>
+            <div class="track gold" aria-label="黄金当日跌幅约 2% 到 3%"><span></span></div>
+          </div>
+          <p>主要受美元和美债收益率上行压制，长期避险逻辑并未完全逆转。</p>
+          <div class="summary-line">
+            <strong>白银</strong>
+            <div class="track silver" aria-label="白银当日跌幅约 6%"><span></span></div>
+          </div>
+          <p>兼具贵金属和工业金属属性，前期涨幅大，短线止盈和止损更集中。</p>
+        </div>
+      </div>
+
+      <div class="shock-board">
+        <article class="metric">
+          <div class="label"><span>现货黄金</span><span class="dot gold"></span></div>
+          <div>
+            <div class="value">-2%~-3%</div>
+            <p>6月5日前后，强就业数据公布后快速回落。</p>
+          </div>
+        </article>
+        <article class="metric">
+          <div class="label"><span>现货白银</span><span class="dot silver"></span></div>
+          <div>
+            <div class="value">约-6%</div>
+            <p>跌幅显著大于黄金，体现高弹性和仓位冲击。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="panel svg-wrap">
+          <svg viewBox="0 0 560 330" role="img" aria-label="黄金与白银跌幅对比图">
+            <text x="24" y="32" class="chart-title">跌幅对比</text>
+            <text x="24" y="54" class="chart-note">按6月5日前后公开行情口径整理</text>
+            <line x1="92" y1="78" x2="92" y2="284" stroke="#dfe4ea" stroke-width="2"/>
+            <line x1="92" y1="284" x2="518" y2="284" stroke="#dfe4ea" stroke-width="2"/>
+            <text x="24" y="128" class="axis-label">黄金</text>
+            <text x="24" y="222" class="axis-label">白银</text>
+            <rect x="92" y="98" width="178" height="46" rx="6" fill="#c6921d"/>
+            <rect x="92" y="192" width="384" height="46" rx="6" fill="#8d99a6"/>
+            <text x="282" y="128" fill="#19202a" font-size="18" font-weight="900">-2%~-3%</text>
+            <text x="488" y="222" fill="#19202a" font-size="18" font-weight="900">约-6%</text>
+            <text x="88" y="308" class="chart-note">0</text>
+            <text x="268" y="308" class="chart-note">-3%</text>
+            <text x="472" y="308" class="chart-note">-6%</text>
+          </svg>
+        </div>
+
+        <div class="panel">
+          <h2>事件链路</h2>
+          <div class="timeline">
+            <div class="event">
+              <time>前期</time>
+              <div><strong>贵金属涨幅累积</strong><p>多头仓位偏拥挤，技术指标偏热，短线资金已有止盈需求。</p></div>
+            </div>
+            <div class="event">
+              <time>6月5日</time>
+              <div><strong>美国就业数据强于预期</strong><p>非农就业增加17.2万人，失业率4.3%，降息押注降温。</p></div>
+            </div>
+            <div class="event">
+              <time>数据后</time>
+              <div><strong>美元与美债收益率走强</strong><p>无息资产的机会成本上升，黄金和白银同步承压。</p></div>
+            </div>
+            <div class="event">
+              <time>随后</time>
+              <div><strong>白银跌幅扩大</strong><p>工业属性、高波动率和止损盘让白银下行弹性高于黄金。</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>下跌原因权重图</h2>
+      <div class="switcher" aria-label="原因筛选">
+        <button type="button" data-filter="all" aria-pressed="true">全部</button>
+        <button type="button" data-filter="macro" aria-pressed="false">宏观</button>
+        <button type="button" data-filter="gold" aria-pressed="false">黄金</button>
+        <button type="button" data-filter="silver" aria-pressed="false">白银</button>
+      </div>
+
+      <div class="grid-3" id="factorGrid">
+        <article class="factor" data-asset="macro">
+          <div class="factor-header">
+            <h3>强就业数据</h3>
+            <span class="tag">触发器</span>
+          </div>
+          <p>就业韧性降低快速降息概率，市场重新定价美联储路径。</p>
+          <div class="meter">
+            <div class="meter-label"><span>冲击权重</span><span>92</span></div>
+            <div class="meter-bar"><span style="width: 92%"></span></div>
+          </div>
+        </article>
+
+        <article class="factor" data-asset="macro">
+          <div class="factor-header">
+            <h3>美元反弹</h3>
+            <span class="tag">计价压力</span>
+          </div>
+          <p>美元走强抬高非美元买家的购买成本，同时分流避险资金。</p>
+          <div class="meter">
+            <div class="meter-label"><span>冲击权重</span><span>84</span></div>
+            <div class="meter-bar"><span style="width: 84%"></span></div>
+          </div>
+        </article>
+
+        <article class="factor" data-asset="gold">
+          <div class="factor-header">
+            <h3>美债收益率上行</h3>
+            <span class="tag">机会成本</span>
+          </div>
+          <p>债券收益率提高，黄金这类无息资产的相对吸引力下降。</p>
+          <div class="meter">
+            <div class="meter-label"><span>冲击权重</span><span>88</span></div>
+            <div class="meter-bar"><span style="width: 88%"></span></div>
+          </div>
+        </article>
+
+        <article class="factor" data-asset="gold">
+          <div class="factor-header">
+            <h3>避险溢价降温</h3>
+            <span class="tag">边际因素</span>
+          </div>
+          <p>市场焦点从地缘风险转向利率环境，黄金短线支撑减弱。</p>
+          <div class="meter">
+            <div class="meter-label"><span>冲击权重</span><span>58</span></div>
+            <div class="meter-bar"><span style="width: 58%"></span></div>
+          </div>
+        </article>
+
+        <article class="factor" data-asset="silver">
+          <div class="factor-header">
+            <h3>前期涨幅过快</h3>
+            <span class="tag">仓位</span>
+          </div>
+          <p>利空出现后，多头止盈、止损和期货仓位调整放大跌幅。</p>
+          <div class="meter">
+            <div class="meter-label"><span>冲击权重</span><span>80</span></div>
+            <div class="meter-bar"><span style="width: 80%"></span></div>
+          </div>
+        </article>
+
+        <article class="factor" data-asset="silver">
+          <div class="factor-header">
+            <h3>工业属性放大波动</h3>
+            <span class="tag">白银特征</span>
+          </div>
+          <p>白银还受制造业、光伏、电子需求预期影响，风险偏好走弱时更敏感。</p>
+          <div class="meter">
+            <div class="meter-label"><span>冲击权重</span><span>74</span></div>
+            <div class="meter-bar"><span style="width: 74%"></span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="panel">
+          <h2>黄金与白银的差异</h2>
+          <div class="compare">
+            <div class="asset-box gold">
+              <h3>黄金</h3>
+              <ul>
+                <li>货币属性与避险属性更强。</li>
+                <li>对实际利率和美元更敏感。</li>
+                <li>央行购金提供中长期支撑。</li>
+                <li>短线回调不等于长期逻辑反转。</li>
+              </ul>
+            </div>
+            <div class="asset-box silver">
+              <h3>白银</h3>
+              <ul>
+                <li>同时具有贵金属和工业金属属性。</li>
+                <li>前期涨幅越大，回撤弹性越高。</li>
+                <li>受光伏、电子、制造业预期影响。</li>
+                <li>杠杆与期货仓位会放大日内波动。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>后续观察变量</h2>
+          <div class="watchlist">
+            <div class="watch"><b>通胀数据</b><span>CPI、PCE是否延续粘性。</span></div>
+            <div class="watch"><b>美联储</b><span>措辞偏鹰或偏鸽。</span></div>
+            <div class="watch"><b>实际利率</b><span>黄金定价关键变量。</span></div>
+            <div class="watch"><b>美元指数</b><span>决定美元计价压力。</span></div>
+            <div class="watch"><b>工业需求</b><span>影响白银相对强弱。</span></div>
+            <div class="watch"><b>资金仓位</b><span>ETF与期货流向。</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>三种情景判断</h2>
+      <div class="grid-3">
+        <article class="scenario">
+          <h3>短线继续承压</h3>
+          <p>如果通胀偏强、美联储继续偏鹰、美元和美债收益率维持高位，金银可能延续调整。</p>
+          <div class="probability">
+            <span>当前压力</span>
+            <span class="bar"><i style="width: 68%"></i></span>
+          </div>
+        </article>
+        <article class="scenario">
+          <h3>下跌后企稳反弹</h3>
+          <p>如果美元回落、收益率下行，或通胀低于预期，降息交易可能重新支撑贵金属。</p>
+          <div class="probability">
+            <span>反弹弹性</span>
+            <span class="bar"><i style="width: 56%"></i></span>
+          </div>
+        </article>
+        <article class="scenario">
+          <h3>高位宽幅震荡</h3>
+          <p>若宏观数据强弱交替，而央行购金和地缘风险提供底部支撑，价格可能进入震荡。</p>
+          <div class="probability">
+            <span>震荡概率</span>
+            <span class="bar"><i style="width: 72%"></i></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="panel">
+          <h2>风险提示</h2>
+          <ul class="risk-list">
+            <li>本轮下跌更像是宏观数据触发的预期重定价和仓位调整。</li>
+            <li>短线主导变量仍是美元、美债收益率和美联储降息预期。</li>
+            <li>白银波动率高于黄金，杠杆、期货、T+D或高仓位ETF风险更高。</li>
+            <li>央行购金、财政赤字和地缘风险仍可能支撑黄金中长期逻辑。</li>
+          </ul>
+        </div>
+        <div class="source-card">
+          <h2>参考来源</h2>
+          <ul class="source-list">
+            <li><a href="https://www.bls.gov/news.release/empsit.nr0.htm">BLS Employment Situation Summary</a></li>
+            <li><a href="https://www.kitco.com/news/off-the-wire/2026-06-05/gold-falls-over-2-robust-us-jobs-data-cements-bets-higher-rates">Reuters via Kitco: Gold falls over 2%</a></li>
+            <li><a href="https://www.kitco.com/news/article/2026-06-05/gold-and-silver-tumble-after-hot-jobs-print-lifts-dollar-treasury-yields">Kitco: Gold and silver tumble</a></li>
+            <li><a href="https://www.cmegroup.com/markets/metals/precious.html">CME Precious Metals</a></li>
+            <li><a href="https://www.federalreserve.gov/monetarypolicy.htm">Federal Reserve Monetary Policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer-note">本文为市场信息可视化整理，不构成任何投资建议。数据口径来自公开报道和官方资料，实际交易价格请以交易平台实时行情为准。</p>
+  </main>
+
+  <script>
+    const buttons = document.querySelectorAll(".switcher button");
+    const factors = document.querySelectorAll(".factor");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.dataset.filter;
+
+        buttons.forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+
+        factors.forEach((factor) => {
+          const visible = filter === "all" || factor.dataset.asset === filter;
+          factor.style.display = visible ? "grid" : "none";
+        });
+      });
+    });
+  </script>
+</body>
+</html>
